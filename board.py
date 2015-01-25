@@ -1,4 +1,5 @@
 from Tkinter import Tk, Canvas, Frame, Button, BOTH, TOP, BOTTOM, LEFT
+import tkMessageBox
 
 MARGIN = 20  # Pixels around the board
 SIDE = 50  # Width of every board cell.
@@ -81,9 +82,6 @@ def find_element(values):
         if e:
             return e
     return False
-
-def solve(board):
-    return search(parse_grid(board))
 
 class SudokuUI(Frame):
     
@@ -212,8 +210,27 @@ class SudokuUI(Frame):
 
     def __solve(self):
         self.convert()
-        display(search(parse_grid(self.string)))
+        raw = search(parse_grid(self.string))
 
+        if raw == False:
+            tkMessageBox.showinfo("Error", "Your sudoku is invalid. Check your input again")
+
+        else:
+            it = iter(sorted(raw.items()))
+
+            temp = []
+            i = 0
+            
+            while i < 81:
+                temp.append(it.next()[1])
+                i += 1
+
+            for i in range(9):
+                for j in range(9):
+                    self.puzzle[i][j] = temp[i*9 + j]
+
+            self.__draw_puzzle()
+        
 def main():
     root = Tk()
     SudokuUI(root)
@@ -222,6 +239,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-    #TODO:
-    #MERGE SUDOKUSOLVER.PY WITH THIS GUI

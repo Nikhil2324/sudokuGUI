@@ -93,24 +93,23 @@ def convert(string): #dots to 0's, or vice versa
     return newString
 
 def main():
-    grid1 = '000000068000090000901052003100420000009807600000065001800540207000070000320000000'
-    #grid1 = convert(grid1)
-    #display(grid_values(grid1)) #displays grid before solving
-    #display(parse_grid(grid1)) #displays grid with preliminary possible values
-    display(solve(grid1)) #displays solved grid
-
-    #grid2 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
-    #display(grid_values(grid2))
-    #display(parse_grid(grid2))
-    #display(solve(grid2))
-
     hardestSudoku = '800000000003600000070090200050007000000045700000100030001000068008500010090000400'
-    #display(grid_values(convert(hardestSudoku)))
-    #hardestSudoku = '800000000003600000070090200050007000000045700000100030001000068008500010090000400'
-    if not solve(hardestSudoku):
-        print "Not a valid sudoku"
-    else:
-        display(solve(hardestSudoku))
+    raw = solve(hardestSudoku)
+    it = iter(sorted(raw.items()))
+
+    print it.next()[1]
+
+    string = []
+
+    i = 0
+    while i < 81:
+        string.append(it.next()[1])
+        i += 1
+
+    #if not solve(hardestSudoku):
+        #print "Not a valid sudoku"
+    #else:
+ #      display(solve(hardestSudoku))
 
 if __name__ == "__main__":
     main()
