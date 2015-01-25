@@ -60,15 +60,6 @@ def remove(possibilities, square, digit): #eliminate d from values[s]
                 return False
     return possibilities
 
-def display(possibilities):
-    width = 1+max(len(possibilities[square]) for square in squares)
-    line = '+'.join(['-'*(width*3)]*3)
-    for r in rows:
-        print ''.join(possibilities[r+c].center(width)+('|' if c in '36' else '') for c in cols)
-        if r in 'CF':
-            print line
-    print
-
 def search(possibilities):
     if possibilities is False:
         return False
@@ -140,6 +131,10 @@ class SudokuUI(Frame):
 
         self.canvas.bind("<Button-1>", self.__cell_clicked)
         self.canvas.bind("<Key>", self.__key_pressed)
+        self.canvas.bind("<Left>", self.__go_left)
+        self.canvas.bind("<Right>", self.__go_right)
+        self.canvas.bind("<Up>", self.__go_up)
+        self.canvas.bind("<Down>", self.__go_down)
     
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -197,12 +192,32 @@ class SudokuUI(Frame):
 
         self.__draw_cursor()
 
+    def __go_up(self, event):
+        if self.row >= 1 and self.row <= 8:
+            self.row -= 1
+            self.__draw_cursor()
+
+    def __go_down(self, event):
+        if self.row >= 0 and self.row <= 7:
+            self.row += 1
+            self.__draw_cursor()
+
+    def __go_right(self, event):
+        if self.col >= 0 and self.col <= 7:
+            self.col += 1
+            self.__draw_cursor()
+
+    def __go_left(self, event):
+        if self.col >= 1 and self.col <= 8:
+            self.col -= 1
+            self.__draw_cursor()
+
     def __key_pressed(self, event):
         if self.row >= 0 and self.col >= 0 and event.char in "1234567890":
             self.puzzle[self.row][self.col] = int(event.char)
             #self.col, self.row = -1, -1
             self.__draw_puzzle()
-            self.__draw_cursor()
+            self.__draw_cursor()        
 
     def __clear(self):
         self.reset()
